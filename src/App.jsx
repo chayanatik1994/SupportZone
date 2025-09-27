@@ -1,35 +1,69 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState, useEffect } from "react";
+import Navbar from "./components/Navbar";
+import Banner from "./components/Banner";
+import IssuesManagement from "./components/IssuesManagement";
+import TaskStatus from "./components/TaskStatus";
+import ResolvedTasks from "./components/ResolvedTasks";
+import Footer from "./components/Footer";
+import Container from "./components/Container";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [tickets, setTickets] = useState([]);
+  const [inProgressTasks, setInProgressTasks] = useState([]);
+  const [resolvedTasks, setResolvedTasks] = useState([]);
+
+  useEffect(() => {
+      fetch("/Issues-data.json")
+     .then((res) => res.json())
+      .then((data) => setTickets(data))
+      .catch(() => toast.error("Failed to load tickets"));
+  }, []);
+
+  const addToInProgress = (ticket) => {
+    if (
+      inProgressTasks.some((t) => t.id === ticket.id) ||
+    resolvedTasks.some((t) => t.id === ticket.id)
+    ) {
+      toast.info("Ticket is already in progress or resolved");
+      return;
+    }
+    setInProgressTasks((prev) => [...prev, ticket]);
+      setTickets((prev) => prev.filter((t) => t.id !== ticket.id));
+     toast.success(`Added "${ticket.title}" to In-Progress`);
+  };
+
+  const completeTask = (taskId) => {
+    const task = inProgressTasks.find((t) => t.id === taskId);
+    if (!task) return;
+
+    setInProgressTasks((prev) => prev.filter((t) => t.id !== taskId));
+      setResolvedTasks((prev) => [...prev, task]);
+       setTickets((prev) => prev.filter((t) => t.id !== taskId));
+    toast.success(`Task "${task.title}" marked as resolved!`);
+  };
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Navbar />
+      <Container>
+        <Banner
+          inProgressCount={inProgressTasks.length}
+          resolvedCount={resolvedTasks.length}
+        />
+        <div className="flex flex-col md:flex-row gap-6 mt-10">
+           <IssuesManagement tickets={tickets} addToInProgress={addToInProgress} />
+      <div className="flex flex-col gap-6">
+              <TaskStatus tasks={inProgressTasks} completeTask={completeTask} />
+              <ResolvedTasks tasks={resolvedTasks} />
+          </div>
+        </div>
+      </Container>
+        <Footer />
+      <ToastContainer position="top-right" autoClose={3000} />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

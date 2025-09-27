@@ -12,7 +12,7 @@ const Toggles_btn = ({ selectedTasks, Resolved }) => {
       {selectedTasks.map((task) => (
         <div
        key={task.id}
-       className="mb-3 flex justify-between items-center border-b pb-2"
+       className="mb-3 flex justify-between items-center border-b pb-3"
         >
           <p className="font-medium">{task.title}</p>
           <button

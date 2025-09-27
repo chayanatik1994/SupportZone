@@ -15,31 +15,32 @@ function App() {
   const [resolvedTasks, setResolvedTasks] = useState([]);
 
   useEffect(() => {
-      fetch("/Issues-data.json")
-     .then((res) => res.json())
-      .then((data) => setTickets(data))
-      .catch(() => toast.error("Failed to load tickets"));
+    fetch("/Issues-data.json")
+      .then((res) => res.json())
+        .then((data) => setTickets(data))
+       .catch(() => toast.error("Failed to load tickets"));
   }, []);
 
-const addToInProgress = (ticket) => {
-  if (
-    inProgressTasks.some((t) => t.id === ticket.id) ||
-    resolvedTasks.some((t) => t.id === ticket.id)
-  ) {
-    toast.info("Ticket is already in progress or resolved");
-    return;
-  }
-  setInProgressTasks((prev) => [...prev, ticket]);    
+  const addToInProgress = (ticket) => {
+    if (
+           inProgressTasks.some((t) => t.id === ticket.id) ||
+      resolvedTasks.some((t) => t.id === ticket.id)
+    ) {
+         toast.info("Ticket is already in progress or resolved");
+      return;
+    }
+       setInProgressTasks((prev) => [...prev, ticket]);
   
-     toast.success(`Added "${ticket.title}" to In-Progress`);
-};
+    toast.success(`Added "${ticket.title}" to In-Progress`);
+  };
 
   const completeTask = (taskId) => {
     const task = inProgressTasks.find((t) => t.id === taskId);
     if (!task) return;
 
-    setInProgressTasks((prev) => prev.filter((t) => t.id !== taskId));
-      setResolvedTasks((prev) => [...prev, task]);
+       setInProgressTasks((prev) => prev.filter((t) => t.id !== taskId));
+    setResolvedTasks((prev) => [...prev, task]);
+
     toast.success(`Task "${task.title}" marked as resolved!`);
   };
 
@@ -52,14 +53,14 @@ const addToInProgress = (ticket) => {
           resolvedCount={resolvedTasks.length}
         />
         <div className="flex flex-col md:flex-row gap-6 mt-10">
-           <IssuesManagement tickets={tickets} addToInProgress={addToInProgress} />
-      <div className="flex flex-col gap-6">
-              <TaskStatus tasks={inProgressTasks} completeTask={completeTask} />
-              <ResolvedTasks tasks={resolvedTasks} />
+              <IssuesManagement tickets={tickets} addToInProgress={addToInProgress} />
+          <div className="flex flex-col gap-6">
+                <TaskStatus tasks={inProgressTasks} completeTask={completeTask} />
+            <ResolvedTasks tasks={resolvedTasks} />
           </div>
         </div>
-      </Container>
-        <Footer />
+       </Container>
+      <Footer />
       <ToastContainer position="top-right" autoClose={3000} />
     </>
   );

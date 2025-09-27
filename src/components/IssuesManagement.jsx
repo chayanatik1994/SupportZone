@@ -13,7 +13,7 @@ const IssuesManagement = ({ tickets, addToInProgress }) => {
             <div
               key={ticket.id}
                  onClick={() => addToInProgress(ticket)}
-              className="p-4 bg-gray-100 rounded shadow cursor-pointer"
+              className="p-4 bg-gray-100 rounded shadow"
             >
               <div className="flex justify-between mb-2">
                 <h3 className="font-semibold text-gray-800">{ticket.title}</h3>
@@ -34,7 +34,7 @@ const IssuesManagement = ({ tickets, addToInProgress }) => {
               <div className="flex justify-between text-xs text-gray-500">
                 <div className="flex items-center gap-2">
                   <span>#{ticket.id}</span>
-                  <span className="text-red-600 font-semibold">{ticket.priority}</span>
+             <span className="text-red-600 font-semibold">{ticket.priority}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span>{ticket.customer}</span>

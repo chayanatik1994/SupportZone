@@ -21,18 +21,18 @@ function App() {
       .catch(() => toast.error("Failed to load tickets"));
   }, []);
 
-  const addToInProgress = (ticket) => {
-    if (
-      inProgressTasks.some((t) => t.id === ticket.id) ||
+const addToInProgress = (ticket) => {
+  if (
+    inProgressTasks.some((t) => t.id === ticket.id) ||
     resolvedTasks.some((t) => t.id === ticket.id)
-    ) {
-      toast.info("Ticket is already in progress or resolved");
-      return;
-    }
-    setInProgressTasks((prev) => [...prev, ticket]);
-      setTickets((prev) => prev.filter((t) => t.id !== ticket.id));
+  ) {
+    toast.info("Ticket is already in progress or resolved");
+    return;
+  }
+  setInProgressTasks((prev) => [...prev, ticket]);    
+  
      toast.success(`Added "${ticket.title}" to In-Progress`);
-  };
+};
 
   const completeTask = (taskId) => {
     const task = inProgressTasks.find((t) => t.id === taskId);
@@ -40,7 +40,6 @@ function App() {
 
     setInProgressTasks((prev) => prev.filter((t) => t.id !== taskId));
       setResolvedTasks((prev) => [...prev, task]);
-       setTickets((prev) => prev.filter((t) => t.id !== taskId));
     toast.success(`Task "${task.title}" marked as resolved!`);
   };
 

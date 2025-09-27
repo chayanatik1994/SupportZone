@@ -7,7 +7,7 @@ const Navbar = () => {
        <Container>
         <nav className="px-6 py-4 items-center lg:px-20 justify-between flex">
             <h1 className="text-black font-bold text-2xl">CS — Ticket System</h1>
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-5">
             <ul className="text-sm text-black flex gap-3 ">
               <li>Home</li>
             <li>FAQ</li>
